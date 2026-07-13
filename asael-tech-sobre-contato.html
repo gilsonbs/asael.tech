@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asael.tech — Sobre &amp; Contato</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --bg:#0B0D12; --surface:#12151C; --surface-2:#171B24; --border:#232833;
+    --text:#EDEEF2; --muted:#8B93A7; --muted-2:#5C6478;
+    --blue:#5B8CFF; --orange:#FF6B35; --green:#34D399;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{ background:var(--bg); color:var(--text); font-family:'Manrope', sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased; }
+  .mono{ font-family:'JetBrains Mono', monospace; }
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ max-width:1100px; margin:0 auto; padding:0 24px; }
+
+  .grid-bg{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image: linear-gradient(rgba(91,140,255,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(91,140,255,0.045) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 70% 50% at 50% 0%, black 40%, transparent 90%);
+  }
+
+  header{ position:sticky; top:0; z-index:50; backdrop-filter: blur(10px); background: rgba(11,13,18,0.75); border-bottom:1px solid var(--border); }
+  nav{ display:flex; align-items:center; justify-content:space-between; max-width:1100px; margin:0 auto; padding:16px 24px; }
+  .logo{ font-weight:800; font-size:18px; letter-spacing:-0.02em; display:flex; align-items:center; gap:8px;}
+  .logo .dot{ width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 10px var(--green);}
+  .navlinks{ display:flex; gap:32px; font-size:14px; color:var(--muted); }
+  .navlinks a.active{ color:var(--text); }
+  .navlinks a:hover{ color:var(--text); }
+  .cta-btn{ background:var(--blue); color:#0B0D12; font-weight:700; font-size:14px; padding:10px 18px; border-radius:8px; transition:transform .15s ease, background .15s ease; display:inline-block; border:none; cursor:pointer; font-family:'Manrope',sans-serif; }
+  .cta-btn:hover{ background:#7CA2FF; transform:translateY(-1px); }
+  .cta-ghost{ border:1px solid var(--border); padding:10px 18px; border-radius:8px; font-size:14px; font-weight:600; color:var(--text); transition:border-color .15s ease, background .15s ease; display:inline-block; }
+  .cta-ghost:hover{ border-color:var(--blue); background:rgba(91,140,255,0.08); }
+  @media (max-width:760px){ .navlinks{display:none;} }
+
+  .tag{ font-family:'JetBrains Mono', monospace; font-size:12.5px; color:var(--blue); letter-spacing:0.05em; text-transform:uppercase; }
+
+  /* SOBRE HERO */
+  .about-hero{ position:relative; z-index:1; padding:90px 0 60px; }
+  .about-hero h1{ font-size:clamp(32px,5vw,48px); font-weight:800; letter-spacing:-0.02em; margin-top:12px; max-width:680px; }
+  .about-hero p{ color:var(--muted); font-size:17px; margin-top:18px; max-width:600px; line-height:1.7; }
+  .credential{
+    display:flex; align-items:center; gap:10px; margin-top:22px; padding:12px 16px;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    max-width:600px; font-size:13.5px; color:var(--muted);
+  }
+  .credential .badge{
+    font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--orange);
+    border:1px solid rgba(255,107,53,0.3); background:rgba(255,107,53,0.08);
+    padding:3px 8px; border-radius:6px; flex-shrink:0;
+  }
+
+  /* STORY TIMELINE */
+  .story{ position:relative; z-index:1; padding:20px 0 90px; }
+  .story-grid{ display:grid; grid-template-columns: 1fr 2fr; gap:60px; }
+  @media (max-width:800px){ .story-grid{ grid-template-columns:1fr; gap:32px; } }
+  .story-side h3{ font-size:15px; font-weight:700; margin-bottom:6px; }
+  .story-side p{ color:var(--muted); font-size:13.5px; line-height:1.6; }
+
+  .story-item{ padding:22px 0; border-top:1px solid var(--border); display:grid; grid-template-columns:70px 1fr; gap:24px; }
+  .story-item:last-child{ border-bottom:1px solid var(--border); }
+  .story-item .year{ font-family:'JetBrains Mono', monospace; color:var(--muted-2); font-size:13px; padding-top:2px; }
+  .story-item h4{ font-size:15.5px; font-weight:700; }
+  .story-item p{ color:var(--muted); font-size:13.5px; margin-top:6px; line-height:1.6; }
+
+  /* STACK PANEL */
+  .stack-panel{ position:relative; z-index:1; padding:0 0 90px; }
+  .panel-card{ background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:36px; }
+  .panel-head{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:10px; margin-bottom:24px; }
+  .panel-head h3{ font-size:19px; font-weight:700; }
+  .panel-head span{ font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--muted-2); }
+  .stack-tags{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:28px; }
+  .stack-tags span{ font-family:'JetBrains Mono', monospace; font-size:12.5px; border:1px solid var(--border); padding:6px 12px; border-radius:8px; color:var(--muted); }
+  .diff-note{ display:flex; gap:14px; align-items:flex-start; background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:18px 20px; }
+  .diff-note .dot{ width:8px; height:8px; border-radius:50%; background:var(--orange); margin-top:6px; flex-shrink:0; }
+  .diff-note p{ font-size:14px; color:var(--muted); line-height:1.65; }
+  .diff-note strong{ color:var(--text); }
+
+  /* CONTATO */
+  .contato{ position:relative; z-index:1; padding:10px 0 120px; }
+  .contato-grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start; }
+  @media (max-width:800px){ .contato-grid{ grid-template-columns:1fr; } }
+
+  .contact-card{ background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:36px; }
+  .field{ margin-bottom:20px; }
+  .field label{ display:block; font-size:13px; font-weight:600; margin-bottom:8px; color:var(--muted); }
+  .field input, .field textarea, .field select{
+    width:100%; background:var(--surface-2); border:1px solid var(--border); border-radius:8px;
+    padding:12px 14px; color:var(--text); font-family:'Manrope', sans-serif; font-size:14px;
+    outline:none; transition:border-color .15s ease;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus{ border-color:var(--blue); }
+  .field textarea{ resize:vertical; min-height:100px; }
+  .submit-btn{ width:100%; text-align:center; margin-top:6px; }
+
+  .direct-card{ background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:36px; display:flex; flex-direction:column; gap:18px; }
+  .direct-item{ display:flex; align-items:center; gap:16px; padding:16px; border:1px solid var(--border); border-radius:10px; transition:border-color .15s ease, background .15s ease; }
+  .direct-item:hover{ border-color:var(--blue); background:rgba(91,140,255,0.05); }
+  .direct-icon{ width:38px; height:38px; border-radius:8px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+  .direct-item h4{ font-size:14.5px; font-weight:700; }
+  .direct-item p{ font-size:13px; color:var(--muted); margin-top:2px; }
+
+  .response-note{ font-family:'JetBrains Mono', monospace; font-size:12.5px; color:var(--green); display:flex; align-items:center; gap:8px; margin-top:6px; }
+  .response-note .pulse{ width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green); }
+
+  footer{ border-top:1px solid var(--border); padding:32px 0; position:relative; z-index:1; }
+  footer .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+  footer .fmuted{ color:var(--muted-2); font-size:13px; font-family:'JetBrains Mono', monospace; }
+  footer .flinks{ display:flex; gap:20px; align-items:center; }
+  footer .flinks a{ color:var(--muted-2); font-size:13px; font-family:'JetBrains Mono', monospace; text-decoration:none; }
+  footer .flinks a:hover{ color:var(--text); }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<header>
+  <nav>
+    <div class="logo"><span class="dot"></span>asael<span style="color:var(--muted-2)">.tech</span></div>
+    <div class="navlinks">
+      <a href="#">Serviços</a>
+      <a href="#">Preços</a>
+      <a href="#">Portfólio</a>
+      <a href="#" class="active">Sobre</a>
+    </div>
+    <a href="#contato" class="cta-btn">Solicitar orçamento</a>
+  </nav>
+</header>
+
+<section class="about-hero">
+  <div class="wrap">
+    <div class="tag">Sobre</div>
+    <h1>Um dev, processo estruturado, entrega real.</h1>
+    <p>A Asael.tech não é uma equipe de 20 pessoas — é um único ponto de contato técnico, do primeiro protótipo ao deploy em produção, usando um processo que a maioria das agências ainda não adotou.</p>
+    <div class="credential">
+      <span class="badge">FORMAÇÃO</span>
+      <span>Engenheiro de software com pós-graduação em IA, Machine Learning e Data Science — é essa base técnica que sustenta o processo assistido por IA em cada projeto.</span>
+    </div>
+  </div>
+</section>
+
+<section class="story">
+  <div class="wrap story-grid">
+    <div class="story-side">
+      <h3>Como eu trabalho</h3>
+      <p>Cada projeto segue um briefing estruturado antes de qualquer linha de código, e é construído em etapas sequenciais e revisáveis — não em blocos fechados que só aparecem prontos no fim.</p>
+    </div>
+    <div>
+      <div class="story-item">
+        <div class="year mono">01</div>
+        <div>
+          <h4>Briefing e escopo</h4>
+          <p>Levantamento de requisitos reais, com dados de mercado quando fazem diferença na decisão — não achismo.</p>
+        </div>
+      </div>
+      <div class="story-item">
+        <div class="year mono">02</div>
+        <div>
+          <h4>Prototipação visual</h4>
+          <p>Identidade e telas validadas com você antes de qualquer implementação — sem retrabalho de última hora.</p>
+        </div>
+      </div>
+      <div class="story-item">
+        <div class="year mono">03</div>
+        <div>
+          <h4>Desenvolvimento em etapas</h4>
+          <p>Implementação sequencial e assistida por IA, com cada etapa revisável — você acompanha o progresso, não só o resultado final.</p>
+        </div>
+      </div>
+      <div class="story-item">
+        <div class="year mono">04</div>
+        <div>
+          <h4>Deploy e suporte</h4>
+          <p>No ar com domínio, hospedagem e, se quiser, um plano de manutenção contínua.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stack-panel">
+  <div class="wrap">
+    <div class="panel-card">
+      <div class="panel-head">
+        <h3>Stack e diferencial técnico</h3>
+        <span>// o que sustenta cada entrega</span>
+      </div>
+      <div class="stack-tags">
+        <span>React</span><span>TypeScript</span><span>Vite</span><span>Tailwind</span>
+        <span>Supabase</span><span>Electron</span><span>Capacitor</span><span>Anthropic SDK</span>
+      </div>
+      <div class="diff-note">
+        <div class="dot"></div>
+        <p><strong>Por que a entrega é mais rápida sem perder qualidade:</strong> o desenvolvimento é assistido por fluxos de IA estruturados em cada etapa — do código ao conteúdo — o que reduz o tempo de build sem pular briefing, testes ou revisão. É tecnologia moderna aplicada ao processo, não só ao produto final.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contato" id="contato">
+  <div class="wrap">
+    <div class="tag">Contato</div>
+    <h1 style="font-size:clamp(28px,4vw,38px); font-weight:800; letter-spacing:-0.02em; margin-top:12px; margin-bottom:36px;">Vamos conversar sobre seu projeto.</h1>
+
+    <div class="contato-grid">
+      <form class="contact-card">
+        <div class="field">
+          <label>Nome</label>
+          <input type="text" placeholder="Seu nome">
+        </div>
+        <div class="field">
+          <label>E-mail</label>
+          <input type="email" placeholder="voce@empresa.com">
+        </div>
+        <div class="field">
+          <label>Tipo de projeto</label>
+          <select>
+            <option>Site</option>
+            <option>Aplicativo</option>
+            <option>SaaS / Sistema</option>
+            <option>Ainda não sei</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Conte um pouco sobre o projeto</label>
+          <textarea placeholder="O que você precisa, prazo estimado, referências..."></textarea>
+        </div>
+        <button type="button" class="cta-btn submit-btn">Enviar orçamento</button>
+      </form>
+
+      <div class="direct-card">
+        <div class="direct-item">
+          <div class="direct-icon">💬</div>
+          <div>
+            <h4>WhatsApp</h4>
+            <p>Resposta mais rápida — ideal se você já sabe o que precisa</p>
+          </div>
+        </div>
+        <div class="direct-item">
+          <div class="direct-icon">✉️</div>
+          <div>
+            <h4>contato@asael.tech</h4>
+            <p>Pra propostas mais detalhadas ou envio de documentos</p>
+          </div>
+        </div>
+        <div class="response-note"><span class="pulse"></span> resposta em até 24h úteis</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="fmuted">asael.tech © 2026</span>
+    <div class="flinks">
+      <span class="fmuted">sites · aplicativos · saas</span>
+      <a href="asael-tech-politica-privacidade.html">Política de Privacidade</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
