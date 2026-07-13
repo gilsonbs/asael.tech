@@ -19,7 +19,8 @@ jobs:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: ./asael.tech/
+        local-dir: ./       # Pega tudo da raiz do seu GitHub
+        server-dir: ./
         port: 21       
         protocol: ftp
-        timeout: 60000 
+        timeout: 60000
