@@ -19,4 +19,7 @@ jobs:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: ./home2/monted69/asael.tech/ # Ajuste o caminho exato se o site estiver em uma subpasta
+        server-dir: ./home2/monted69/asael.tech/ 
+        port: 21       
+        protocol: ftp
+        timeout: 60000 
