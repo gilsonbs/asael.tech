@@ -114,10 +114,10 @@ export const cases: Case[] = [
   },
   {
     slug: 'gestao-financeira-igrejas',
-    title: 'Gestão Financeira para Igrejas',
+    title: 'Gestafé',
     category: 'saas',
     categoryLabel: 'Sistema / SaaS',
-    badge: 'conceito',
+    badge: 'real',
     glyph: 'igreja/financeiro.sql',
     summary:
       'Sistema multiplataforma para controle de dízimos, ofertas e despesas, com app desktop e mobile.',
