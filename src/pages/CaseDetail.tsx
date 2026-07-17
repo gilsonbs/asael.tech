@@ -48,6 +48,17 @@ export default function CaseDetail() {
             </div>
           </div>
 
+          {item.preview && (
+            <div className="border-b border-border">
+              <iframe
+                src={item.preview}
+                title={`Preview ${item.title}`}
+                scrolling="yes"
+                className="h-[480px] w-full border-none"
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 gap-px bg-border md:grid-cols-3">
             <div className="bg-surface p-7 md:p-8">
               <div className="font-mono text-xs text-muted-2">01</div>
