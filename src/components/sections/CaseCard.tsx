@@ -8,11 +8,21 @@ export default function CaseCard({ item }: { item: Case }) {
       to={`/portfolio/${item.slug}`}
       className="flex flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-all duration-200 hover:-translate-y-1 hover:border-blue"
     >
-      <div className="relative flex h-[180px] items-center justify-center border-b border-border bg-[radial-gradient(circle_at_30%_20%,rgba(91,140,255,0.18),transparent_55%),radial-gradient(circle_at_80%_80%,rgba(255,107,53,0.12),transparent_55%)] bg-surface-2">
-        <Badge tone={item.badge === 'real' ? 'green' : 'purple'} className="absolute left-3.5 top-3.5">
+      <div className="relative flex h-[180px] items-center justify-center overflow-hidden border-b border-border bg-[radial-gradient(circle_at_30%_20%,rgba(91,140,255,0.18),transparent_55%),radial-gradient(circle_at_80%_80%,rgba(255,107,53,0.12),transparent_55%)] bg-surface-2">
+        <Badge tone={item.badge === 'real' ? 'green' : 'purple'} className="absolute left-3.5 top-3.5 z-10">
           {item.badge === 'real' ? 'CASE REAL' : 'CONCEITO'}
         </Badge>
-        <span className="font-mono text-[13px] text-muted-2">{item.glyph}</span>
+        {item.preview ? (
+          <iframe
+            src={item.preview}
+            title={`Preview ${item.title}`}
+            scrolling="no"
+            className="pointer-events-none absolute left-0 top-0 origin-top-left border-none"
+            style={{ width: '200%', height: '200%', transform: 'scale(0.5)' }}
+          />
+        ) : (
+          <span className="font-mono text-[13px] text-muted-2">{item.glyph}</span>
+        )}
       </div>
       <div className="flex flex-1 flex-col p-6">
         <div className="font-mono text-[11.5px] uppercase tracking-wide text-muted-2">

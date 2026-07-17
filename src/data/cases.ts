@@ -13,6 +13,7 @@ export interface Case {
   problema: string
   solucao: string
   resultado: string
+  preview?: string
 }
 
 export const categoryFilters: { label: string; value: CaseCategory | 'todos' }[] = [
@@ -39,6 +40,7 @@ export const cases: Case[] = [
       'Loja própria com catálogo, checkout via Mercado Pago e painel de gestão de pedidos, hospedada em VPS próprio.',
     resultado:
       'Checkout funcional no ar em 18 dias, com fluxo de pedido e pagamento validado de ponta a ponta.',
+    preview: '/mockups/rosa-carmen.html',
   },
   {
     slug: 'estudos-app',
