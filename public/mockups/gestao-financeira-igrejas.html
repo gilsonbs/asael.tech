@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Gestão Financeira — Igrejas</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Inter', system-ui, sans-serif;
+    background: #0C1020;
+    color: #E2E8F0;
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  .app { display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 210px;
+    min-width: 210px;
+    background: #0A0E1C;
+    border-right: 1px solid #1A2040;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+  .sidebar-brand {
+    padding: 20px 18px 18px;
+    border-bottom: 1px solid #1A2040;
+  }
+  .brand-icon { font-size: 24px; margin-bottom: 4px; }
+  .brand-name { font-size: 14px; font-weight: 800; color: #fff; letter-spacing: -0.01em; }
+  .brand-church { font-size: 11px; color: #4A5580; margin-top: 1px; }
+
+  .sidebar-section-label {
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #2A3460;
+    padding: 14px 18px 6px;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 9px;
+    padding: 9px 18px;
+    font-size: 12.5px;
+    color: #4A5580;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+  }
+  .nav-item.active { color: #7C9EFF; border-left-color: #7C9EFF; background: rgba(124,158,255,0.06); }
+  .nav-icon { font-size: 15px; width: 18px; text-align: center; }
+
+  .sidebar-footer { margin-top: auto; padding: 14px 18px; border-top: 1px solid #1A2040; }
+  .sync-status {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 11px; color: #3A5040;
+    background: rgba(52,211,153,0.06);
+    border: 1px solid rgba(52,211,153,0.12);
+    border-radius: 8px;
+    padding: 7px 10px;
+  }
+  .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #34d399; box-shadow: 0 0 6px #34d399; flex-shrink: 0; }
+  .sync-txt { color: #34d399; font-weight: 600; }
+
+  /* MAIN */
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+  .topbar {
+    background: #0A0E1C;
+    border-bottom: 1px solid #1A2040;
+    padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .topbar-left { }
+  .topbar-title { font-size: 16px; font-weight: 700; }
+  .topbar-period { font-size: 11px; color: #4A5580; margin-top: 2px; }
+  .topbar-actions { display: flex; gap: 8px; }
+  .btn-sm {
+    border: 1px solid #1A2040;
+    background: transparent;
+    color: #6A7590;
+    padding: 6px 12px;
+    border-radius: 7px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-accent {
+    background: #7C9EFF;
+    border: none;
+    color: #0A0E1C;
+    padding: 6px 14px;
+    border-radius: 7px;
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .content { padding: 20px 24px; }
+
+  /* KPI CARDS */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .kpi {
+    background: #0E1428;
+    border: 1px solid #1A2040;
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .kpi-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #4A5580; margin-bottom: 8px; }
+  .kpi-val { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; margin-bottom: 4px; }
+  .kpi-delta { font-size: 11px; display: flex; align-items: center; gap: 3px; }
+  .delta-up { color: #34d399; }
+  .delta-down { color: #f87171; }
+  .kpi-icon { font-size: 20px; float: right; margin-top: -2px; opacity: 0.6; }
+
+  /* GRID 2 col */
+  .mid-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+
+  /* CHART */
+  .chart-card {
+    background: #0E1428;
+    border: 1px solid #1A2040;
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .chart-title { font-size: 13px; font-weight: 700; }
+  .chart-legend { display: flex; gap: 12px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 10.5px; color: #4A5580; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* BAR CHART */
+  .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 100px; }
+  .bar-group { flex: 1; display: flex; gap: 3px; align-items: flex-end; flex-direction: column; }
+  .bar-wrap { flex: 1; display: flex; gap: 3px; align-items: flex-end; width: 100%; }
+  .bar { flex: 1; border-radius: 4px 4px 0 0; min-height: 4px; }
+  .bar-month { font-size: 9px; color: #2A3460; text-align: center; margin-top: 5px; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; }
+
+  /* CATEGORY DONUT (CSS) */
+  .donut-area { display: flex; align-items: center; gap: 20px; }
+  .donut-svg { width: 100px; height: 100px; flex-shrink: 0; }
+  .cat-list { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+  .cat-row { display: flex; align-items: center; gap: 8px; }
+  .cat-bar-wrap { flex: 1; height: 5px; background: #1A2040; border-radius: 999px; overflow: hidden; }
+  .cat-bar-fill { height: 100%; border-radius: 999px; }
+  .cat-name { font-size: 11.5px; color: #8A9AB8; width: 90px; flex-shrink: 0; }
+  .cat-val { font-size: 11.5px; font-weight: 700; color: #E2E8F0; width: 56px; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+
+  /* TABLE */
+  .table-card {
+    background: #0E1428;
+    border: 1px solid #1A2040;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .table-header { padding: 14px 16px 10px; display: flex; align-items: center; justify-content: space-between; }
+  .table-title { font-size: 13px; font-weight: 700; }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: #0A0E1C; }
+  th {
+    padding: 9px 16px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #2A3460;
+    text-align: left;
+    border-bottom: 1px solid #1A2040;
+  }
+  td {
+    padding: 9px 16px;
+    font-size: 12px;
+    color: #8A9AB8;
+    border-bottom: 1px solid #0F1424;
+  }
+  tr:last-child td { border-bottom: none; }
+  .td-name { color: #C8D4F0; font-weight: 500; }
+  .td-val { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .td-green { color: #34d399; }
+  .td-red { color: #f87171; }
+  .td-blue { color: #7C9EFF; }
+  .type-badge {
+    display: inline-block;
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 5px;
+    letter-spacing: 0.04em;
+  }
+  .badge-dizimo { background: rgba(52,211,153,0.1); color: #34d399; }
+  .badge-oferta { background: rgba(124,158,255,0.1); color: #7C9EFF; }
+  .badge-despesa { background: rgba(248,113,113,0.1); color: #f87171; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">⛪</div>
+      <div class="brand-name">FinançasIgreja</div>
+      <div class="brand-church">Igreja Despertai</div>
+    </div>
+    <div class="sidebar-section-label">Principal</div>
+    <div class="nav-item active"><span class="nav-icon">📊</span> Dashboard</div>
+    <div class="nav-item"><span class="nav-icon">💰</span> Dízimos</div>
+    <div class="nav-item"><span class="nav-icon">🙏</span> Ofertas</div>
+    <div class="nav-item"><span class="nav-icon">📤</span> Despesas</div>
+    <div class="nav-item"><span class="nav-icon">📋</span> Lançamentos</div>
+    <div class="sidebar-section-label">Relatórios</div>
+    <div class="nav-item"><span class="nav-icon">📈</span> Mensal</div>
+    <div class="nav-item"><span class="nav-icon">📅</span> Anual</div>
+    <div class="nav-item"><span class="nav-icon">🧾</span> Exportar PDF</div>
+    <div class="sidebar-section-label">Sistema</div>
+    <div class="nav-item"><span class="nav-icon">👥</span> Membros</div>
+    <div class="nav-item"><span class="nav-icon">⚙️</span> Configurações</div>
+    <div class="sidebar-footer">
+      <div class="sync-status">
+        <span class="sync-dot"></span>
+        <span class="sync-txt">Sincronizado</span>
+        <span>· agora</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title">Dashboard Financeiro</div>
+        <div class="topbar-period">Julho 2026 · Semana 3</div>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn-sm">← Mês anterior</button>
+        <button class="btn-sm">📅 Jul 2026</button>
+        <button class="btn-sm">🧾 Exportar PDF</button>
+        <button class="btn-accent">+ Lançamento</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div style="display:flex;justify-content:space-between">
+            <div class="kpi-label">Dízimos</div>
+            <span class="kpi-icon">💚</span>
+          </div>
+          <div class="kpi-val" style="color:#34d399">R$ 8.450</div>
+          <div class="kpi-delta delta-up">↑ 12% vs jul/25</div>
+        </div>
+        <div class="kpi">
+          <div style="display:flex;justify-content:space-between">
+            <div class="kpi-label">Ofertas</div>
+            <span class="kpi-icon">🙏</span>
+          </div>
+          <div class="kpi-val" style="color:#7C9EFF">R$ 3.210</div>
+          <div class="kpi-delta delta-up">↑ 5% vs jul/25</div>
+        </div>
+        <div class="kpi">
+          <div style="display:flex;justify-content:space-between">
+            <div class="kpi-label">Despesas</div>
+            <span class="kpi-icon">📤</span>
+          </div>
+          <div class="kpi-val" style="color:#f87171">R$ 4.890</div>
+          <div class="kpi-delta delta-down">↑ 8% vs jul/25</div>
+        </div>
+        <div class="kpi">
+          <div style="display:flex;justify-content:space-between">
+            <div class="kpi-label">Saldo</div>
+            <span class="kpi-icon">✅</span>
+          </div>
+          <div class="kpi-val" style="color:#fff">R$ 6.770</div>
+          <div class="kpi-delta delta-up">↑ 18% vs jul/25</div>
+        </div>
+      </div>
+
+      <!-- CHARTS -->
+      <div class="mid-grid">
+        <!-- BAR CHART -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">Entradas vs Despesas — 2026</span>
+            <div class="chart-legend">
+              <span class="legend-item"><span class="legend-dot" style="background:#34d399"></span>Entradas</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#f87171"></span>Despesas</span>
+            </div>
+          </div>
+          <div class="bar-chart">
+            <!-- Jan -->
+            <div class="bar-col">
+              <div style="flex:1;display:flex;align-items:flex-end;gap:3px;width:100%">
+                <div class="bar" style="background:#34d399;height:55%"></div>
+                <div class="bar" style="background:#f87171;height:40%"></div>
+              </div>
+              <div class="bar-month">Jan</div>
+            </div>
+            <div class="bar-col">
+              <div style="flex:1;display:flex;align-items:flex-end;gap:3px;width:100%">
+                <div class="bar" style="background:#34d399;height:62%"></div>
+                <div class="bar" style="background:#f87171;height:45%"></div>
+              </div>
+              <div class="bar-month">Fev</div>
+            </div>
+            <div class="bar-col">
+              <div style="flex:1;display:flex;align-items:flex-end;gap:3px;width:100%">
+                <div class="bar" style="background:#34d399;height:70%"></div>
+                <div class="bar" style="background:#f87171;height:52%"></div>
+              </div>
+              <div class="bar-month">Mar</div>
+            </div>
+            <div class="bar-col">
+              <div style="flex:1;display:flex;align-items:flex-end;gap:3px;width:100%">
+                <div class="bar" style="background:#34d399;height:58%"></div>
+                <div class="bar" style="background:#f87171;height:48%"></div>
+              </div>
+              <div class="bar-month">Abr</div>
+            </div>
+            <div class="bar-col">
+              <div style="flex:1;display:flex;align-items:flex-end;gap:3px;width:100%">
+                <div class="bar" style="background:#34d399;height:75%"></div>
+                <div class="bar" style="background:#f87171;height:44%"></div>
+              </div>
+              <div class="bar-month">Mai</div>
+            </div>
+            <div class="bar-col">
+              <div style="flex:1;display:flex;align-items:flex-end;gap:3px;width:100%">
+                <div class="bar" style="background:#34d399;height:68%"></div>
+                <div class="bar" style="background:#f87171;height:50%"></div>
+              </div>
+              <div class="bar-month">Jun</div>
+            </div>
+            <div class="bar-col">
+              <div style="flex:1;display:flex;align-items:flex-end;gap:3px;width:100%">
+                <div class="bar" style="background:#34d399;height:82%"></div>
+                <div class="bar" style="background:#f87171;height:42%"></div>
+              </div>
+              <div class="bar-month">Jul</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CATEGORIES -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">Despesas por categoria</span>
+          </div>
+          <div class="donut-area">
+            <svg class="donut-svg" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#1A2040" stroke-width="14"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#7C9EFF" stroke-width="14"
+                stroke-dasharray="89.5 149.6" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#f87171" stroke-width="14"
+                stroke-dasharray="53.9 185.2" stroke-dashoffset="-89.5" transform="rotate(-90 50 50)"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#fbbf24" stroke-width="14"
+                stroke-dasharray="35.9 203.2" stroke-dashoffset="-143.4" transform="rotate(-90 50 50)"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#34d399" stroke-width="14"
+                stroke-dasharray="20 219.1" stroke-dashoffset="-179.3" transform="rotate(-90 50 50)"/>
+              <text x="50" y="46" text-anchor="middle" font-size="14" font-weight="800" fill="#E2E8F0">60%</text>
+              <text x="50" y="58" text-anchor="middle" font-size="8" fill="#4A5580">do orçamento</text>
+            </svg>
+            <div class="cat-list">
+              <div class="cat-row">
+                <span class="cat-name">Ministérios</span>
+                <div class="cat-bar-wrap"><div class="cat-bar-fill" style="width:60%;background:#7C9EFF"></div></div>
+                <span class="cat-val">R$ 2.920</span>
+              </div>
+              <div class="cat-row">
+                <span class="cat-name">Manutenção</span>
+                <div class="cat-bar-wrap"><div class="cat-bar-fill" style="width:36%;background:#f87171"></div></div>
+                <span class="cat-val">R$ 1.080</span>
+              </div>
+              <div class="cat-row">
+                <span class="cat-name">Administrativo</span>
+                <div class="cat-bar-wrap"><div class="cat-bar-fill" style="width:24%;background:#fbbf24"></div></div>
+                <span class="cat-val">R$ 590</span>
+              </div>
+              <div class="cat-row">
+                <span class="cat-name">Missões</span>
+                <div class="cat-bar-wrap"><div class="cat-bar-fill" style="width:13%;background:#34d399"></div></div>
+                <span class="cat-val">R$ 300</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABELA -->
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-title">Últimos lançamentos</span>
+          <button class="btn-sm">Ver todos →</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Descrição</th>
+              <th>Tipo</th>
+              <th>Responsável</th>
+              <th style="text-align:right">Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>17/07</td>
+              <td class="td-name">Dízimos — culto domingo manhã</td>
+              <td><span class="type-badge badge-dizimo">DÍZIMO</span></td>
+              <td>Tesoureiro</td>
+              <td class="td-val td-green" style="text-align:right">+ R$ 1.240</td>
+            </tr>
+            <tr>
+              <td>16/07</td>
+              <td class="td-name">Manutenção ar-condicionado — templo</td>
+              <td><span class="type-badge badge-despesa">DESPESA</span></td>
+              <td>J. Santos</td>
+              <td class="td-val td-red" style="text-align:right">− R$ 380</td>
+            </tr>
+            <tr>
+              <td>14/07</td>
+              <td class="td-name">Oferta especial — culto de missões</td>
+              <td><span class="type-badge badge-oferta">OFERTA</span></td>
+              <td>Tesoureiro</td>
+              <td class="td-val td-blue" style="text-align:right">+ R$ 560</td>
+            </tr>
+            <tr>
+              <td>13/07</td>
+              <td class="td-name">Material didático — escola dominical</td>
+              <td><span class="type-badge badge-despesa">DESPESA</span></td>
+              <td>M. Costa</td>
+              <td class="td-val td-red" style="text-align:right">− R$ 210</td>
+            </tr>
+            <tr>
+              <td>10/07</td>
+              <td class="td-name">Dízimos — culto quinta-feira</td>
+              <td><span class="type-badge badge-dizimo">DÍZIMO</span></td>
+              <td>Tesoureiro</td>
+              <td class="td-val td-green" style="text-align:right">+ R$ 890</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Forja</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Roboto', sans-serif;
+    background: #0E0E12;
+    color: #EAEAEE;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* mobile frame feel - wide layout showing app */
+  .app { display: flex; min-height: 100vh; }
+
+  /* SIDEBAR nav */
+  .sidebar {
+    width: 220px;
+    min-width: 220px;
+    background: #13131A;
+    border-right: 1px solid #1E1E2A;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+  }
+  .app-brand {
+    padding: 0 18px 20px;
+    border-bottom: 1px solid #1E1E2A;
+    margin-bottom: 14px;
+  }
+  .brand-name {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #FF5252, #FF8A50);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .brand-sub { font-size: 10px; color: #5A5A70; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 18px;
+    font-size: 13px;
+    color: #6A6A80;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+  }
+  .nav-item.active { color: #FF5252; border-left-color: #FF5252; background: rgba(255,82,82,0.06); }
+  .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+  .nav-divider { height: 1px; background: #1E1E2A; margin: 8px 18px; }
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 14px 18px;
+    border-top: 1px solid #1E1E2A;
+  }
+  .streak-box {
+    background: rgba(255,82,82,0.08);
+    border: 1px solid rgba(255,82,82,0.2);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .streak-flame { font-size: 22px; }
+  .streak-num { font-size: 20px; font-weight: 800; color: #FF5252; line-height: 1; }
+  .streak-label { font-size: 10px; color: #8A8A9A; }
+
+  /* MAIN */
+  .main { flex: 1; overflow: hidden; }
+
+  /* TOP BAR */
+  .topbar {
+    background: #13131A;
+    border-bottom: 1px solid #1E1E2A;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .topbar-title { font-size: 16px; font-weight: 700; }
+  .topbar-date { font-size: 12px; color: #5A5A70; }
+  .topbar-actions { display: flex; gap: 8px; }
+  .btn-outline {
+    border: 1px solid #2A2A3A;
+    background: transparent;
+    color: #8A8A9A;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #FF5252, #FF8A50);
+    border: none;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  /* CONTENT */
+  .content { padding: 20px 24px; display: grid; grid-template-columns: 1fr 300px; gap: 18px; }
+
+  /* SESSION HEADER */
+  .session-card {
+    background: #13131A;
+    border: 1px solid #1E1E2A;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+  .session-name-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .session-name { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
+  .session-status {
+    background: rgba(255,82,82,0.12);
+    border: 1px solid rgba(255,82,82,0.25);
+    color: #FF5252;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.06em;
+  }
+  .session-meta { display: flex; gap: 16px; margin-top: 12px; }
+  .meta-item { }
+  .meta-val { font-size: 20px; font-weight: 800; color: #fff; }
+  .meta-label { font-size: 10px; color: #5A5A70; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* EXERCISE CARDS */
+  .exercise-card {
+    background: #13131A;
+    border: 1px solid #1E1E2A;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .exercise-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .exercise-name { font-size: 14px; font-weight: 700; }
+  .exercise-muscle {
+    font-size: 10px;
+    color: #FF8A50;
+    background: rgba(255,138,80,0.1);
+    border: 1px solid rgba(255,138,80,0.2);
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+  .sets-grid {
+    display: grid;
+    grid-template-columns: 28px 1fr 1fr 1fr 28px;
+    gap: 6px;
+    align-items: center;
+  }
+  .sets-header-cell { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.06em; color: #4A4A60; font-weight: 700; text-align: center; }
+  .set-num { font-size: 11px; color: #5A5A70; text-align: center; font-weight: 600; }
+  .set-cell {
+    background: #1A1A24;
+    border: 1px solid #2A2A3A;
+    border-radius: 6px;
+    padding: 6px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #EAEAEE;
+  }
+  .set-cell.done { background: rgba(255,82,82,0.08); border-color: rgba(255,82,82,0.2); color: #FF5252; }
+  .set-check { width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid #2A2A3A; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 11px; }
+  .set-check.checked { background: #FF5252; border-color: #FF5252; color: #fff; }
+
+  /* AI PANEL */
+  .ai-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .ai-card {
+    background: #13131A;
+    border: 1px solid #1E1E2A;
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(110,168,254,0.1);
+    border: 1px solid rgba(110,168,254,0.2);
+    color: #6EA8FE;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+    margin-bottom: 10px;
+  }
+  .ai-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; color: #fff; }
+  .ai-text { font-size: 12px; color: #7A7A90; line-height: 1.6; }
+
+  .suggestion-item {
+    display: flex;
+    gap: 8px;
+    padding: 9px 0;
+    border-bottom: 1px solid #1E1E2A;
+    align-items: flex-start;
+    font-size: 12.5px;
+    color: #EAEAEE;
+    line-height: 1.4;
+  }
+  .suggestion-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .sug-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  .progress-card { }
+  .prog-label { font-size: 11px; color: #5A5A70; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+  .prog-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .prog-name { font-size: 12px; color: #EAEAEE; }
+  .prog-val { font-size: 12px; font-weight: 700; color: #FF5252; }
+  .prog-bar { height: 4px; background: #1E1E2A; border-radius: 999px; margin-bottom: 10px; overflow: hidden; }
+  .prog-fill { height: 100%; background: linear-gradient(90deg, #FF5252, #FF8A50); border-radius: 999px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="app-brand">
+      <div class="brand-name">FORJA</div>
+      <div class="brand-sub">Treino inteligente</div>
+    </div>
+    <div class="nav-item active"><span class="nav-icon">🏋️</span> Treino de hoje</div>
+    <div class="nav-item"><span class="nav-icon">📊</span> Histórico</div>
+    <div class="nav-item"><span class="nav-icon">📋</span> Meus treinos</div>
+    <div class="nav-divider"></div>
+    <div class="nav-item"><span class="nav-icon">🤖</span> IA / Sugestões</div>
+    <div class="nav-item"><span class="nav-icon">⚙️</span> Configurações</div>
+    <div class="sidebar-footer">
+      <div class="streak-box">
+        <span class="streak-flame">🔥</span>
+        <div>
+          <div class="streak-num">12</div>
+          <div class="streak-label">dias seguidos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title">Treino de Hoje</div>
+        <div class="topbar-date">Quinta-feira, 17 de julho de 2026</div>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn-outline">Ver histórico</button>
+        <button class="btn-primary">✓ Finalizar treino</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div>
+        <!-- SESSION INFO -->
+        <div class="session-card">
+          <div class="session-name-row">
+            <span class="session-name">💪 Treino de Costas</span>
+            <span class="session-status">EM ANDAMENTO</span>
+          </div>
+          <div class="session-meta">
+            <div class="meta-item">
+              <div class="meta-val">38<span style="font-size:13px;color:#5A5A70">min</span></div>
+              <div class="meta-label">Duração</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-val">4<span style="font-size:13px;color:#5A5A70">/6</span></div>
+              <div class="meta-label">Exercícios</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-val">12<span style="font-size:13px;color:#5A5A70"> séries</span></div>
+              <div class="meta-label">Concluídas</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-val">4.200<span style="font-size:13px;color:#5A5A70">kg</span></div>
+              <div class="meta-label">Volume total</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXERCISE 1 -->
+        <div class="exercise-card">
+          <div class="exercise-header">
+            <span class="exercise-name">Remada Curvada com Barra</span>
+            <span class="exercise-muscle">Dorsal</span>
+          </div>
+          <div class="sets-grid">
+            <div class="sets-header-cell">#</div>
+            <div class="sets-header-cell">Kg</div>
+            <div class="sets-header-cell">Reps</div>
+            <div class="sets-header-cell">Esforço</div>
+            <div class="sets-header-cell"></div>
+            <div class="set-num">1</div>
+            <div class="set-cell done">70</div>
+            <div class="set-cell done">10</div>
+            <div class="set-cell done">RPE 7</div>
+            <div class="set-check checked">✓</div>
+            <div class="set-num">2</div>
+            <div class="set-cell done">75</div>
+            <div class="set-cell done">8</div>
+            <div class="set-cell done">RPE 8</div>
+            <div class="set-check checked">✓</div>
+            <div class="set-num">3</div>
+            <div class="set-cell">75</div>
+            <div class="set-cell">8</div>
+            <div class="set-cell">—</div>
+            <div class="set-check"></div>
+          </div>
+        </div>
+
+        <!-- EXERCISE 2 -->
+        <div class="exercise-card">
+          <div class="exercise-header">
+            <span class="exercise-name">Puxada Frontal na Polia</span>
+            <span class="exercise-muscle">Dorsal</span>
+          </div>
+          <div class="sets-grid">
+            <div class="sets-header-cell">#</div>
+            <div class="sets-header-cell">Kg</div>
+            <div class="sets-header-cell">Reps</div>
+            <div class="sets-header-cell">Esforço</div>
+            <div class="sets-header-cell"></div>
+            <div class="set-num">1</div>
+            <div class="set-cell done">60</div>
+            <div class="set-cell done">12</div>
+            <div class="set-cell done">RPE 6</div>
+            <div class="set-check checked">✓</div>
+            <div class="set-num">2</div>
+            <div class="set-cell done">65</div>
+            <div class="set-cell done">10</div>
+            <div class="set-cell done">RPE 7</div>
+            <div class="set-check checked">✓</div>
+            <div class="set-num">3</div>
+            <div class="set-cell">65</div>
+            <div class="set-cell">10</div>
+            <div class="set-cell">—</div>
+            <div class="set-check"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI PANEL -->
+      <div class="ai-panel">
+        <div class="ai-card">
+          <div class="ai-badge">✨ Claude AI</div>
+          <div class="ai-title">Sugestão para hoje</div>
+          <p class="ai-text">Com base no seu histórico das últimas 3 semanas, aumente a remada curvada para <strong style="color:#FF8A50">80kg × 6 reps</strong> na 3ª série. Seu padrão de recuperação sugere que está pronto para progressão.</p>
+        </div>
+
+        <div class="ai-card">
+          <div class="ai-badge">📈 Progressão</div>
+          <div>
+            <div class="prog-label">Carga — últimas 4 semanas</div>
+            <div class="prog-row"><span class="prog-name">Remada Curvada</span><span class="prog-val">+8kg</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:72%"></div></div>
+            <div class="prog-row"><span class="prog-name">Puxada Frontal</span><span class="prog-val">+5kg</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:55%"></div></div>
+            <div class="prog-row"><span class="prog-name">Rosca Direta</span><span class="prog-val">+2kg</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:30%"></div></div>
+          </div>
+        </div>
+
+        <div class="ai-card">
+          <div class="ai-badge">💡 Dicas</div>
+          <div class="suggestion-item"><span class="sug-icon">⏱️</span> Descanso ideal entre séries: 90–120s para este treino</div>
+          <div class="suggestion-item"><span class="sug-icon">🍗</span> Ingestão proteica hoje: meta de 160g para melhor recuperação</div>
+          <div class="suggestion-item"><span class="sug-icon">😴</span> Último treino de costas há 5 dias — ótima recuperação</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

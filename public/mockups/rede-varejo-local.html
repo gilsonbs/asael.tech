@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Rede de Varejo Local — Gerador de Peças</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Inter', system-ui, sans-serif;
+    background: #F5F6FA;
+    color: #1A1D2E;
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* HEADER */
+  header {
+    background: #fff;
+    border-bottom: 1px solid #E5E7EF;
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, #FF6B35, #FF9500);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .logo-name { font-size: 15px; font-weight: 700; letter-spacing: -0.02em; color: #1A1D2E; }
+  .logo-store { font-size: 11px; color: #8A8FA8; margin-left: 2px; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .store-badge {
+    display: flex; align-items: center; gap: 6px;
+    background: #F0F2FA;
+    border: 1px solid #E5E7EF;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4A4F6A;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #FF6B35, #FF9500);
+    border: none;
+    color: #fff;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  /* LAYOUT */
+  .layout { display: grid; grid-template-columns: 300px 1fr; height: calc(100vh - 56px); }
+
+  /* LEFT PANEL - generator */
+  .gen-panel {
+    background: #fff;
+    border-right: 1px solid #E5E7EF;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .gen-header {
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid #E5E7EF;
+  }
+  .gen-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .gen-sub { font-size: 11px; color: #8A8FA8; }
+
+  .gen-form { padding: 14px 18px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+  .field-label { font-size: 11px; font-weight: 700; color: #4A4F6A; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
+  .field-input {
+    width: 100%;
+    background: #F5F6FA;
+    border: 1px solid #E5E7EF;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 13px;
+    color: #1A1D2E;
+    font-family: inherit;
+  }
+  .field-input:focus { outline: none; border-color: #FF6B35; }
+
+  .color-swatches { display: flex; gap: 6px; flex-wrap: wrap; }
+  .swatch {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+  .swatch.active { border-color: #1A1D2E; transform: scale(1.1); }
+
+  .template-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .template-opt {
+    border: 1.5px solid #E5E7EF;
+    border-radius: 8px;
+    padding: 8px 6px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 10px;
+    color: #6A6F88;
+    font-weight: 600;
+  }
+  .template-opt.active { border-color: #FF6B35; color: #FF6B35; background: rgba(255,107,53,0.05); }
+  .template-icon { font-size: 18px; display: block; margin-bottom: 3px; }
+
+  .gen-footer { padding: 14px 18px; border-top: 1px solid #E5E7EF; }
+  .generate-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #FF6B35, #FF9500);
+    border: none;
+    color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+
+  /* RIGHT PANEL - preview */
+  .preview-panel {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .preview-toolbar {
+    background: #fff;
+    border-bottom: 1px solid #E5E7EF;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .preview-tabs { display: flex; gap: 4px; }
+  .tab {
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #8A8FA8;
+    cursor: pointer;
+  }
+  .tab.active { background: #FFF0EA; color: #FF6B35; }
+  .preview-actions { display: flex; gap: 6px; }
+  .action-btn {
+    border: 1px solid #E5E7EF;
+    background: #fff;
+    color: #4A4F6A;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .preview-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    gap: 20px;
+    background: #EAECF5;
+    overflow-y: auto;
+  }
+
+  /* PROMO PIECES */
+  .promo-piece {
+    background: #FF6B35;
+    border-radius: 16px;
+    width: 240px;
+    height: 240px;
+    flex-shrink: 0;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 8px 32px rgba(255,107,53,0.3);
+  }
+  .promo-piece::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+  }
+  .promo-piece::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -30px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.08);
+  }
+  .promo-store { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.7); letter-spacing: 0.1em; text-transform: uppercase; position: relative; z-index: 1; }
+  .promo-product { font-size: 17px; font-weight: 800; color: #fff; line-height: 1.2; position: relative; z-index: 1; }
+  .promo-price-area { position: relative; z-index: 1; }
+  .promo-from { font-size: 10px; color: rgba(255,255,255,0.65); margin-bottom: 2px; }
+  .promo-price { font-size: 36px; font-weight: 900; color: #fff; line-height: 1; letter-spacing: -0.03em; }
+  .promo-unit { font-size: 12px; color: rgba(255,255,255,0.7); }
+
+  .promo-piece-2 {
+    background: linear-gradient(135deg, #1A1D2E, #2D3154);
+    border-radius: 16px;
+    width: 240px;
+    height: 320px;
+    flex-shrink: 0;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .promo-badge-orange {
+    background: #FF6B35;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    align-self: flex-start;
+    margin-bottom: 12px;
+  }
+  .promo-piece-2 .promo-product { font-size: 20px; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+  .promo-desc-2 { font-size: 11px; color: rgba(255,255,255,0.45); line-height: 1.5; flex: 1; }
+  .promo-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 12px 0; }
+  .promo-price-row { display: flex; align-items: flex-end; justify-content: space-between; }
+  .promo-price-2 { font-size: 32px; font-weight: 900; color: #FF6B35; letter-spacing: -0.03em; line-height: 1; }
+  .promo-cta-2 {
+    background: #FF6B35;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 6px 12px;
+    border-radius: 8px;
+    letter-spacing: 0.04em;
+  }
+
+  /* AI status */
+  .ai-status {
+    background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(255,107,53,0.2);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 11px;
+    color: #FF6B35;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    backdrop-filter: blur(8px);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🏪</div>
+    <div>
+      <div class="logo-name">VarejoAI <span class="logo-store">— Gerador de peças</span></div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="store-badge">🏬 Mercadinho do João</div>
+    <button class="btn-primary">↓ Exportar tudo</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- PAINEL GERADOR -->
+  <div class="gen-panel">
+    <div class="gen-header">
+      <div class="gen-title">✨ Gerar nova peça</div>
+      <div class="gen-sub">IA atualiza preço e produto automaticamente</div>
+    </div>
+    <div class="gen-form">
+      <div>
+        <div class="field-label">Produto</div>
+        <input class="field-input" type="text" value="Arroz Tio João 5kg" />
+      </div>
+      <div>
+        <div class="field-label">Preço</div>
+        <input class="field-input" type="text" value="R$ 24,90" />
+      </div>
+      <div>
+        <div class="field-label">Validade da oferta</div>
+        <input class="field-input" type="text" value="Até 20/07/2026" />
+      </div>
+      <div>
+        <div class="field-label">Cor principal</div>
+        <div class="color-swatches">
+          <div class="swatch active" style="background:#FF6B35"></div>
+          <div class="swatch" style="background:#3B82F6"></div>
+          <div class="swatch" style="background:#10B981"></div>
+          <div class="swatch" style="background:#F59E0B"></div>
+          <div class="swatch" style="background:#8B5CF6"></div>
+          <div class="swatch" style="background:#EF4444"></div>
+        </div>
+      </div>
+      <div>
+        <div class="field-label">Template</div>
+        <div class="template-row">
+          <div class="template-opt active"><span class="template-icon">◼️</span>Quadrado</div>
+          <div class="template-opt"><span class="template-icon">▬</span>Story</div>
+          <div class="template-opt"><span class="template-icon">▭</span>Banner</div>
+        </div>
+      </div>
+      <div>
+        <div class="field-label">Tom do texto (IA)</div>
+        <select class="field-input">
+          <option>Urgência — "Só hoje!"</option>
+          <option>Econômico — "Mais por menos"</option>
+          <option>Premium — "Qualidade garantida"</option>
+        </select>
+      </div>
+    </div>
+    <div class="gen-footer">
+      <button class="generate-btn">✨ Gerar peças (IA)</button>
+    </div>
+  </div>
+
+  <!-- PAINEL PREVIEW -->
+  <div class="preview-panel">
+    <div class="preview-toolbar">
+      <div class="preview-tabs">
+        <div class="tab active">Feed</div>
+        <div class="tab">Story</div>
+        <div class="tab">Banner</div>
+        <div class="tab">WhatsApp</div>
+      </div>
+      <div class="preview-actions">
+        <button class="action-btn">🔄 Regenerar</button>
+        <button class="action-btn">↓ PNG</button>
+        <button class="action-btn">↓ JPG</button>
+      </div>
+    </div>
+
+    <div class="preview-area" style="position:relative">
+      <!-- PEÇA 1 - quadrado -->
+      <div class="promo-piece">
+        <div class="promo-store">Mercadinho do João</div>
+        <div class="promo-product">Arroz Tio João 5kg</div>
+        <div class="promo-price-area">
+          <div class="promo-from">Só hoje!</div>
+          <div class="promo-price">24,90</div>
+          <div class="promo-unit">Válido até 20/07</div>
+        </div>
+      </div>
+
+      <!-- PEÇA 2 - story -->
+      <div class="promo-piece-2">
+        <div class="promo-badge-orange">⚡ OFERTA DO DIA</div>
+        <div class="promo-product">Arroz Tio João 5kg</div>
+        <div class="promo-desc-2">Qualidade que você conhece, no preço que cabe no bolso. Aproveite enquanto durar o estoque!</div>
+        <div class="promo-divider"></div>
+        <div class="promo-price-row">
+          <div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:2px;">de R$ 31,90 por</div>
+            <div class="promo-price-2">R$ 24,90</div>
+          </div>
+          <div class="promo-cta-2">GARANTA JÁ</div>
+        </div>
+      </div>
+
+      <!-- AI status badge -->
+      <div class="ai-status">✨ Gerado por IA em 3s</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

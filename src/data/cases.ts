@@ -75,6 +75,7 @@ export const cases: Case[] = [
     solucao:
       'App desktop com Electron + React, banco de dados local, sem login e sem envio de dados para servidor externo.',
     resultado: 'Gestão de tarefas fluida, sem latência de rede e com dados 100% sob controle do usuário.',
+    preview: '/mockups/kanban-offline.html',
   },
   {
     slug: 'forja',
@@ -91,6 +92,7 @@ export const cases: Case[] = [
       'App Android nativo com banco local SQLite e sugestões de progressão de treino geradas por IA a partir do histórico.',
     resultado:
       'Rotina de treino ajustada automaticamente a cada ciclo, sem depender de personal ou planilha manual.',
+    preview: '/mockups/forja.html',
   },
   {
     slug: 'rede-varejo-local',
@@ -108,6 +110,7 @@ export const cases: Case[] = [
       'Site institucional integrado a um gerador de peças promocionais por IA, que atualiza preço e produto automaticamente.',
     resultado:
       'Conceito validado para reduzir o tempo de produção de campanha de dias para minutos, sem depender de agência externa.',
+    preview: '/mockups/rede-varejo-local.html',
   },
   {
     slug: 'gestao-financeira-igrejas',
@@ -125,5 +128,6 @@ export const cases: Case[] = [
       'Sistema com backend Supabase, app desktop (Electron) para tesouraria e app mobile (Capacitor) para lançamento em campo.',
     resultado:
       'Conceito estruturado para dar a instituições religiosas controle financeiro auditável, com dado sincronizado entre dispositivos.',
+    preview: '/mockups/gestao-financeira-igrejas.html',
   },
 ]
