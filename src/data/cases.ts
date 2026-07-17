@@ -130,4 +130,22 @@ export const cases: Case[] = [
       'Conceito estruturado para dar a instituições religiosas controle financeiro auditável, com dado sincronizado entre dispositivos.',
     preview: '/mockups/gestao-financeira-igrejas.html',
   },
+  {
+    slug: 'theology',
+    title: 'Theologia',
+    category: 'aplicativos',
+    categoryLabel: 'Aplicativo desktop',
+    badge: 'real',
+    glyph: 'theology/reader.electron',
+    summary:
+      'Leitor bíblico desktop com 17 versões, dicionário morfológico grego/hebraico, comentaristas clássicos e ilustrações geradas por IA.',
+    stack: ['Electron', 'React', 'TypeScript', 'Claude AI'],
+    problema:
+      'Ferramentas de estudo bíblico sérias são pagas, desconexas e sem integração entre texto, léxico e comentário no mesmo lugar.',
+    solucao:
+      'App desktop com leitor de 17 versões, dicionário Strong integrado, comentários de Calvino, Henry e Spurgeon, e Galeria Sacra com ilustrações geradas por IA.',
+    resultado:
+      'Ambiente completo de estudo exegético, com léxico grego/hebraico e comentaristas clássicos acessíveis diretamente no texto.',
+    preview: '/mockups/theology.html',
+  },
 ]
