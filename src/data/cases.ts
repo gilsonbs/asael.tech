@@ -58,6 +58,7 @@ export const cases: Case[] = [
       'Sistema próprio com editor estruturado, refinamento de texto assistido por IA e sincronização automática via GitHub.',
     resultado:
       'Fluxo de estudo centralizado, com histórico versionado de cada nota e revisão de conteúdo em segundos.',
+    preview: '/mockups/estudos-app.html',
   },
   {
     slug: 'kanban-offline',
